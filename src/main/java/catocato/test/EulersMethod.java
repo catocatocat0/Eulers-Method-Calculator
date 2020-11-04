@@ -1,5 +1,7 @@
 package catocato.test;
 
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
@@ -22,6 +24,7 @@ import java.util.Scanner;
 public class EulersMethod {
     private final Scanner scanner = new Scanner(System.in);
     private File file;
+    private String expression;
 
     public static void main(String[] args){
         EulersMethod euler = new EulersMethod();
@@ -29,11 +32,18 @@ public class EulersMethod {
     }
     public void onEnable(){
         eulersMethod();
+        file = null;
+        expression = null;
     }
 
     public double equation(double x, double y){
         //what equation you want to run
-        return 0.01*y*(1-y/x);
+        Expression e = new ExpressionBuilder(expression)
+                .variables("x","y")
+                .build()
+                .setVariable("x",x)
+                .setVariable("y",y);
+        return e.evaluate();
     }
 
     public void eulersMethod(){
@@ -41,6 +51,18 @@ public class EulersMethod {
         double stepSize;
         double y;
         double x;
+
+        //the equation to evaluate
+        System.out.println("Enter the equation");
+        while(true) {
+            try {
+                expression = scanner.next();
+                break;
+            } catch (InputMismatchException e) {
+                scanner.next();
+                System.out.println("Invalid input! Enter the equation");
+            }
+        }
 
         //how many iterations of euler's method to do
         System.out.println("Enter the number of iterations");
@@ -104,14 +126,13 @@ public class EulersMethod {
 
         plotData.addSeries(series);
 
-        plot(plotData);
-
-        if(outputResults(result)){
-            System.out.println("Results successfully written to results.txt!");
+        if(outputResults(result)&&plot(plotData)){
+            System.out.println("Results successfully written to results.txt & plot.png!");
             System.exit(0);
+        }else{
+            System.out.println("There was an error writing results... Exiting");
+            System.exit(-1);
         }
-
-
     }
 
     public void createFile(){
@@ -137,7 +158,8 @@ public class EulersMethod {
         }
     }
 
-    public void plot(XYDataset plotData){
+    public boolean plot(XYDataset plotData){
+        boolean status = false;
         JFreeChart chart = ChartFactory.createScatterPlot(
                 "Euler's method graph",
                 "x",
@@ -170,10 +192,13 @@ public class EulersMethod {
 
         try {
             ChartUtils.saveChartAsPNG(new File("plot.png"), chart, 1500, 1000);
+            status = true;
         }catch (IOException e){
             e.printStackTrace();
             System.out.println("There was an error saving the chart image.");
         }
+
+        return status;
     }
 
     public boolean outputResults(String results){
