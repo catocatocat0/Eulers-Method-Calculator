@@ -11,7 +11,6 @@ import org.jfree.chart.title.TextTitle;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-
 import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
@@ -28,14 +27,13 @@ public class EulersMethod {
         EulersMethod euler = new EulersMethod();
         euler.onEnable();
     }
-
     public void onEnable(){
         eulersMethod();
     }
 
     public double equation(double x, double y){
         //what equation you want to run
-        return 0.01*y*(1 - y/100);
+        return 0.01*y*(1-y/x);
     }
 
     public void eulersMethod(){
@@ -110,6 +108,7 @@ public class EulersMethod {
 
         if(outputResults(result)){
             System.out.println("Results successfully written to results.txt!");
+            System.exit(0);
         }
 
 
@@ -156,14 +155,8 @@ public class EulersMethod {
         renderer.setSeriesPaint(0, Color.RED);
         renderer.setSeriesStroke(0, new BasicStroke(2.0f));
 
-        renderer.setSeriesPaint(0, Color.RED);
-        renderer.setSeriesStroke(0, new BasicStroke(2.0f));
-
         plot.setRenderer(renderer);
         plot.setBackgroundPaint(Color.white);
-
-        plot.setRangeGridlinesVisible(true);
-        plot.setRangeGridlinePaint(Color.BLACK);
 
         plot.setDomainGridlinesVisible(true);
         plot.setDomainGridlinePaint(Color.BLACK);
