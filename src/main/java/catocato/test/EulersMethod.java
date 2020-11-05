@@ -26,14 +26,14 @@ public class EulersMethod {
     private File file;
     private String expression;
 
-    public static void main(String[] args){
-        EulersMethod euler = new EulersMethod();
-        euler.onEnable();
-    }
-    public void onEnable(){
+    EulersMethod(){
         eulersMethod();
         file = null;
         expression = null;
+    }
+
+    public static void main(String[] args){
+        new EulersMethod();
     }
 
     public double equation(double x, double y){
