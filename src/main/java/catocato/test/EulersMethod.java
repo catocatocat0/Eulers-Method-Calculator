@@ -25,6 +25,10 @@ public class EulersMethod {
     private final Scanner scanner = new Scanner(System.in);
     private File file;
     private String expression;
+    int iterations;
+    double stepSize;
+    double y;
+    double x;
 
     EulersMethod(){
         eulersMethod();
@@ -47,10 +51,6 @@ public class EulersMethod {
     }
 
     public void eulersMethod(){
-        int iterations;
-        double stepSize;
-        double y;
-        double x;
 
         //the equation to evaluate
         System.out.println("Enter the equation");
@@ -112,14 +112,13 @@ public class EulersMethod {
             }
         }
 
-
         String result = "";
-        XYSeries series = new XYSeries("Euler's Method Graph");
+        XYSeries series = new XYSeries("dy/dx = "+expression+"; y("+x+") = "+y);
         for(int i = 0; i <iterations; i++) {
             series.add(x,y);
             result = result + x+" "+y+"\n";
-            x = x + stepSize;
             y = y + stepSize*equation(x,y);
+            x = x + stepSize;
         }
 
         XYSeriesCollection plotData = new XYSeriesCollection();
@@ -161,7 +160,7 @@ public class EulersMethod {
     public boolean plot(XYDataset plotData){
         boolean status = false;
         JFreeChart chart = ChartFactory.createScatterPlot(
-                "Euler's method graph",
+                "Euler's method graph: "+iterations+" iterations, "+stepSize+" step size.",
                 "x",
                 "y",
                 plotData,
@@ -185,7 +184,7 @@ public class EulersMethod {
 
         chart.getLegend().setFrame(BlockBorder.NONE);
 
-        chart.setTitle(new TextTitle("Euler's Method Graph",
+        chart.setTitle(new TextTitle("Euler's method graph: "+iterations+" iterations, "+stepSize+" step size.",
                         new Font("Serif", java.awt.Font.BOLD, 18)
                 )
         );
