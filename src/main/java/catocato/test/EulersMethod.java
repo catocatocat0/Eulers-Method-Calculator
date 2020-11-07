@@ -29,6 +29,7 @@ public class EulersMethod {
     double stepSize;
     double y;
     double x;
+    Expression expr;
 
     EulersMethod(){
         eulersMethod();
@@ -42,12 +43,8 @@ public class EulersMethod {
 
     public double equation(double x, double y){
         //what equation you want to run
-        Expression e = new ExpressionBuilder(expression)
-                .variables("x","y")
-                .build()
-                .setVariable("x",x)
-                .setVariable("y",y);
-        return e.evaluate();
+        expr.setVariable("x",x).setVariable("y",y);
+        return expr.evaluate();
     }
 
     public void eulersMethod(){
@@ -57,6 +54,9 @@ public class EulersMethod {
         while(true) {
             try {
                 expression = scanner.next();
+                expr = new ExpressionBuilder(expression)
+                        .variables("x","y")
+                        .build();
                 break;
             } catch (InputMismatchException e) {
                 scanner.next();
